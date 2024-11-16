@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 
 const app = express();
@@ -48,8 +48,14 @@ async function run() {
       const result = await cardsCollection.insertOne(cardItem);
       res.send(result);
     });
+    app.delete("/cards/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cardsCollection.deleteOne(query);
+      res.send(result);
+    });
 
-    // Send a ping to confirm a successful connection
+    // Send a ping to confirm a successful connectionc
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
